@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Socios – SandsGym{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center mb-4">
+  <div class="col-md-8 col-lg-6 text-center">
+    <a href="{% url 'crear_socios' %}" class="btn btn-success me-2 mb-3">Registrar socio</a>
+
+    <form method="get" action="{% url 'socios_list' %}" class="d-flex gap-2">
+      <input type="text" name="query" value="{{ query }}" class="form-control"
+             placeholder="Buscar por nombre, apellido o DNI">
+      <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+  </div>
+</div>
+
+<h2 class="text-center mb-3">Socios</h2>
+
+<div class="table-responsive">
+  <table class="table table-sm align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Socio</th>
+        <th>DNI</th>
+        <th>Plan</th>
+        <th>Fecha vencimiento</th>
+        <th>Estado cuota</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in socios %}
+      <tr>
+        <td>{{ s.nombre }}, {{ s.apellido }}</td>
+        <td>{{ s.dni }}</td>
+        <td>{{ s.plan|default:"—" }}</td>
+        <td>{{ s.cuota_vencimiento|date:"d/m/Y" }}</td>
+
+        
+        <td>
+          {% with dv=s.dias_vencimiento %}
+            <span class="badge {% if dv >= 0 %}text-bg-success{% else %}text-bg-danger{% endif %}">
+              {{ s.estado_cuota }}
+            </span>
+
+            {% if dv or dv == 0 %}
+              <small class="text-muted d-block mt-1">
+                {% if dv >= 0 %}
+                  vence en {{ dv }} día{% if dv != 1 %}s{% endif %}
+                {% else %}
+                  venció hace {{ dv|cut:"-" }} día{% if dv|cut:"-" != "1" %}s{% endif %}
+                {% endif %}
+              </small>
+            {% endif %}
+          {% endwith %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">No hay socios.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
+

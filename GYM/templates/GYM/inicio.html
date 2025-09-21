@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Inicio – SandsGym{% endblock %}
+{% block content %}
+  <h2 class="mb-3">¡Bienvenid@ a SandsGym!</h2>
+  <p>Elegí una sección para comenzar:</p>
+  <div class="list-group">
+    <a class="list-group-item list-group-item-action" href="{% url 'socios_list' %}">Socios</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'planes_list' %}">Planes</a>
+    <a class="list-group-item list-group-item-action" href="{% url 'clases_list' %}">Clases</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Clases – SandsGym{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center mb-4">
+  <div class="col-md-8 col-lg-6 text-center">
+    <a href="{% url 'registrar_clase' %}" class="btn btn-success mb-3">Registrar clase</a>
+
+    <!-- Buscador por día de semana -->
+    <form method="get" action="{% url 'clases_list' %}" class="row g-2 justify-content-center">
+      <div class="col-auto">
+        <select name="dia" class="form-select">
+          <option value="">Todos los días</option>
+          {% for value,label in DIAS_SEMANA %}
+            <option value="{{ value }}" {% if dia == value|stringformat:'s' %}selected{% endif %}>
+              {{ label }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<h2 class="text-center mb-3">Clases</h2>
+
+<div class="table-responsive">
+  <table class="table table-sm align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Clase</th>
+        <th>Día</th>
+        <th>Hora</th>
+        <th>Cupo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in clases %}
+      <tr>
+        <td class="fw-semibold">{{ c.nombre_clase }}</td>
+        <td>{{ c.get_dia_semana_display }}</td>
+        <td>{{ c.hora|time:"H:i" }}</td>
+        <td>{{ c.cupo }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center text-muted">No hay clases para el filtro seleccionado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
+
+
