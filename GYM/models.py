@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 class Plan(models.Model):
     tipo_plan = models.CharField(max_length=20, unique=True)
@@ -21,7 +21,7 @@ class Socio(models.Model):
     activo = models.BooleanField(default=True)
         
     def __str__(self):
-        return f"{self.nombre}, {self.apellido} - DNI: {self.dni} - Cuota "
+        return f"{self.nombre}, {self.apellido} - DNI: {self.dni}"
     
     def estado_cuota(self):
         if self.cuota_vencimiento >= timezone.now().date():
@@ -29,26 +29,16 @@ class Socio(models.Model):
         else:
             return f"Vencida"
     
-    def dias_vencimiento(self) -> int | None:
+    def dias_vencimiento(self):
         if not self.cuota_vencimiento:
             return None
         return (self.cuota_vencimiento - timezone.now().date()).days
     
     def save(self, *args, **kwargs):
-        base = self.fecha_ingreso
-        if isinstance(base, datetime):
-            base = base.date()
-        self.cuota_vencimiento = base + timedelta(days=365)
+        self.cuota_vencimiento = self.fecha_ingreso.date() + timedelta(days=365)
         super().save(*args, **kwargs)  
     
-DIAS_SEMANA = [
-    (1, "Lunes"),
-    (2, "Martes"),
-    (3, "Miércoles"),
-    (4, "Jueves"),
-    (5, "Viernes"),
-    (6, "Sábado"),
-]
+DIAS_SEMANA = [(1, "Lunes"),(2, "Martes"),(3, "Miércoles"),(4, "Jueves"),(5, "Viernes"),(6, "Sábado"),]
    
 class ClaseGrupal(models.Model):
     nombre_clase = models.CharField(max_length=80)
@@ -58,7 +48,6 @@ class ClaseGrupal(models.Model):
     class Meta:
         ordering = ["nombre_clase", "dia_semana", "hora"]
     
-
     def __str__(self):
         return f"{self.nombre_clase} – {self.get_dia_semana_display()} {self.hora:%H:%M}"
     

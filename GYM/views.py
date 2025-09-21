@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from django.contrib import messages
-from decimal import Decimal, InvalidOperation
 from .models import Socio, Plan, ClaseGrupal, DIAS_SEMANA
 from .forms import SocioForm, ClasesForm, PlanesForm
 
