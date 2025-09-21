@@ -1,4 +1,4 @@
-# TP-3---Arenas-Martina
+# MiPrimeraPagina+Arenas
 Proyecto para el curso de coderhouse Python Flex
 
 1) Posicionarse en la carpeta raiz
